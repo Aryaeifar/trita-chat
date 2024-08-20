@@ -2,10 +2,10 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Demon
+## Demo
 ```bash
 # link
-`https://trita-chat.vercel.app/`
+https://trita-chat.vercel.app/
 ```
 
 ## Setup
