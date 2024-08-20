@@ -16,7 +16,5 @@
     "vue": "latest"
   },
   "devDependencies": {
-    "vite-plugin-vuetify": "^2.0.4",
-    "vuetify": "^3.6.14"
   }
 }

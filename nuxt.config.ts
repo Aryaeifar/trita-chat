@@ -1,4 +1,3 @@
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: false },
@@ -16,30 +15,12 @@ export default defineNuxtConfig({
   },
 
   css: [
-    "vuetify/lib/styles/main.sass",
     "@mdi/font/css/materialdesignicons.min.css",
     "@/assets/scss/app.scss",
   ],
-  build: {
-    transpile: ["vuetify"],
-  },
 
-  modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
-      });
-    },
-  ],
 
-  vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
-    },
-  },
+
 
   compatibilityDate: "2024-08-12",
 });

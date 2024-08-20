@@ -1,9 +1,30 @@
-@import 'style.scss';
+@import 'style';
+@import 'variable';
 @for $i from 0 through 16 {
   .row-gap-#{$i}, .gap-#{$i} {
     row-gap: $i * 4px;
   }
   .col-gap-#{$i}, .gap-#{$i} {
     column-gap: $i * 4px;
+  }
+}
+.truncation-clamp {
+  line-height: 20px;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+
+  $sizes: 1, 2, 3, 4, 5;
+  @each $size in $sizes {
+    &.clamp-#{$size} {
+      -webkit-line-clamp: #{$size};
+      -moz-line-clamp: #{$size};
+      -ms-line-clamp: #{$size};
+      line-clamp: #{$size};
+    }
   }
 }
