@@ -2,6 +2,12 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+## Demon
+```bash
+# link
+`https://trita-chat.vercel.app/`
+```
+
 ## Setup
 
 Make sure to install the dependencies:
