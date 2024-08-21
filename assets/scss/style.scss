@@ -33,6 +33,10 @@ body {
     }
   }
 }
+a {
+  color: black;
+  text-decoration: none;
+}
 .chat-box {
   width: 100%;
 
@@ -155,7 +159,7 @@ body {
       .user-card__content-info {
         display: flex;
         gap: 5px;
-
+        flex: 1 1 auto;
         .user-card__content-name {
           font-size: 12px;
           font-weight: 500;
@@ -174,10 +178,13 @@ body {
       }
       .user-card__content-msg-count {
         background-color: salmon;
-        padding: 3px;
+        padding: 3px 6px;
         font-size: 10px;
         border-radius: 0.2rem;
         color: $light;
+        min-width: 1rem;
+        display: flex;
+        justify-content: center;
       }
     }
     .user-card__footer {

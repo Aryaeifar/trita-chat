@@ -4,7 +4,7 @@ const route = useRoute();
 
 <style lang="scss" scoped></style>
 <template>
-  <div>
-    {{ route.params.id }}
+  <div class="chatbox-wrapper">
+    
   </div>
 </template>

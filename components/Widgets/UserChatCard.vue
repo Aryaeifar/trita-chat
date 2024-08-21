@@ -1,26 +1,23 @@
 <template>
   <div class="user-card">
     <div class="user-card__img">
-      <img src="@/assets/images/vader.jpg" alt="" />
+      <img :src="items.img" alt="" />
     </div>
     <div class="user-card__info">
       <div class="user-card__head">
         <div class="user-card__head-title truncation-clamp clamp-1">
-          New Group
+          <NuxtLink :to="items.link">{{items.title}}</NuxtLink>
         </div>
-        <div class="user-card__head-date">Jun 22</div>
+        <div class="user-card__head-date">{{ items.date }}</div>
       </div>
       <div class="user-card__content">
         <div class="user-card__content-info">
-          <div class="user-card__content-name">t-learning:</div>
+          <div class="user-card__content-name">{{items.lastMessanger}}:</div>
           <div class="user-card__content-sub truncation-clamp clamp-1">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem
-            magnam tenetur tempore sapiente illum saepe, possimus recusandae
-            doloremque ut ea omnis labore similique. Molestias, dolorem nobis
-            minima est voluptates maiores.
+          {{ items.msg }}
           </div>
         </div>
-        <div class="user-card__content-msg-count">4332</div>
+        <div class="user-card__content-msg-count" v-if="items.unreadMsg">{{ items.unreadMsg }}</div>
       </div>
       <div class="user-card__footer">
         <div class="user-card__tags">
@@ -28,7 +25,7 @@
             inbox
           </button>
           <button class="user-card__tags-btn user-card__tags-btn-type">
-            Group
+            {{ items.type }}
           </button>
         </div>
       </div>
@@ -39,8 +36,11 @@
 
 <script>
 export default {
-  setup() {
-    return {};
+  props: {
+    items:{
+      type: Object,
+      required:true
+    }
   },
 };
 </script>
