@@ -103,10 +103,10 @@ const chatLists = [
       <NuxtPage />
     </div>
   </div>
-  <WidgetsNewChat
+  <!-- <WidgetsNewChat
     :isOpen="isModalOpened"
     @modal-close="closeModal"
     @submit="submitHandler"
     name="first-modal"
-  />
+  /> -->
 </template>
