@@ -326,16 +326,20 @@ a {
         color: $light;
       }
     }
+    .chatbox-footer__attach {
+      cursor: pointer;
+      .attach-icon {
+        font-size: 2rem;
+        color: $gray-300;
+      }
+    }
     .chatbox-footer__icons {
       border-radius: 0.4rem;
       background-color: $light;
       border: 1px solid $gray-100;
       display: flex;
       justify-content: center;
-      .attach-icon {
-        font-size: 2rem;
-        color: $gray-300;
-      }
+
       .voice-icon {
         font-size: 2rem;
         color: $gray-300;
@@ -375,15 +379,21 @@ a {
     display: flex;
     flex-direction: column;
     .message-card__user-msg-item {
-      display: inline-block;
+      display: inline-block !important;
       background-color: $gray-100;
       border-radius: 10px 10px 10px 10px;
-      padding: 0.5rem;
+      padding: 0.2rem 0.4rem;
       margin-top: 15px;
       .message-card__header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
+        font-size: 12px;
+        .message-card__header-info {
+          display: flex;
+          flex-direction: column;
+          font-size: 10px;
+        }
         .message-card__user-name {
           color: #25bdbe;
           font-size: 11px;
@@ -394,6 +404,11 @@ a {
       }
       .message-card__content {
         font-size: 14px;
+        .message-card__content-sent-img {
+          height: 100px;
+          max-width: 100%;
+          border-radius: 5px;
+        }
       }
       .message-card__date {
         font-size: 10px;
@@ -410,13 +425,19 @@ a {
   flex-direction: row-reverse;
   .message-card__user-msg {
     .message-card__user-msg-item {
+      display: inline-block !important;
+      word-wrap: break-word !important;
+
       background-color: $blue-100;
       color: $light;
       .message-card__user-name {
-        color: $blue-200;
-        .down-icon {
-          color: $gray-300;
-        }
+        color: $blue-300 !important;
+      }
+      .down-icon {
+        color: $gray-400 !important;
+      }
+      .message-card__content {
+        display: inline-block !important;
       }
       .message-card__date {
         font-size: 11px;

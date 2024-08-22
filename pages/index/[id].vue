@@ -3,7 +3,53 @@ const userMessage = ref(null);
 const chats = ref([]);
 const backToBottom = ref(false);
 const chatContentRef = ref(null);
+const fileInput = ref(null);
 
+const selectFileInput = () => {
+  fileInput.value.click();
+};
+const fileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const fileName = file.name;
+    const fileExtension = fileName.split(".").pop();
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target.result;
+        chats.value.push({
+          isUser: true,
+          userName: "ALi",
+          userProfileImg: "./assets/images/itachi.jpg",
+          userMessages: [{
+            userMessage: imageUrl,
+            userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isImage: true,
+            isForwarded: false
+          }]
+        });
+        addToStorage();
+        scrollToBottom();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      chats.value.push({
+        isUser: true,
+        userName: "ALi",
+        userProfileImg: "./assets/images/itachi.jpg",
+        userMessages: [{
+          userMessage: fileName,
+          userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isImage: false,
+          fileExtension: fileExtension,
+          isForwarded: false
+        }]
+      });
+      addToStorage();
+      scrollToBottom();
+    }
+  }
+};
 const loadChats = () => {
   const chatHistory = localStorage.getItem("history");
   if (chatHistory) {
@@ -25,38 +71,42 @@ onBeforeUnmount(() => {
   const chatContent = chatContentRef.value;
   chatContent.removeEventListener("scroll", handleScroll);
 });
-const addToStorage = () => {
-  localStorage.setItem("history", JSON.stringify(chats.value));
-};
+
 const sendMessage = () => {
   if (userMessage.value) {
     chats.value.push({
       isUser: true,
       userName: "ALi",
       userProfileImg: "./assets/images/itachi.jpg",
-      userMessage: userMessage.value,
-      userMessageDate: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      userMessages: [{
+        userMessage: userMessage.value,
+        userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        isForwarded: false
+      }]
     });
     addToStorage();
     userMessage.value = null;
   }
+  scrollToBottom();
 };
 
 const handleScroll = () => {
   const chatContent = chatContentRef.value;
-  const isAtBottom = chatContent.scrollHeight - chatContent.scrollTop === chatContent.clientHeight;
+  const isAtBottom =
+    chatContent.scrollHeight - chatContent.scrollTop ===
+    chatContent.clientHeight;
   backToBottom.value = !isAtBottom;
 };
 const scrollToBottom = () => {
   const chatContent = chatContentRef.value;
   chatContent.scrollTo({
     top: chatContent.scrollHeight,
-    behavior: 'smooth'
-  })
+    behavior: "smooth",
+  });
   backToBottom.value = false;
+};
+const addToStorage = () => {
+  localStorage.setItem("history", JSON.stringify(chats.value));
 };
 </script>
 
@@ -98,9 +148,19 @@ const scrollToBottom = () => {
       </div>
     </div>
     <div class="chatbox-footer">
-      <button class="chatbox-footer__icons chatbox-footer__attach">
+      <button
+        class="chatbox-footer__icons chatbox-footer__attach"
+        role="button"
+        @click="selectFileInput"
+      >
         <span class="mdi mdi-paperclip attach-icon"></span>
       </button>
+      <input
+        type="file"
+        ref="fileInput"
+        style="display: none"
+        @change="fileUpload"
+      />
       <div class="chatbox-footer__input-msg">
         <input
           type="text"
