@@ -1,4 +1,10 @@
 <script setup>
+import { useRoute, useRouter } from "vue-router";
+const isChatOpen = ref(false);
+const isMobile = ref(window.innerWidth <= 1056);
+const router = useRouter();
+const route = useRoute();
+
 const chatLists = [
   {
     img: "./assets/images/vader.jpg",
@@ -8,7 +14,7 @@ const chatLists = [
     msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
     unreadMsg: "4332",
     type: "Group",
-    link:'1',
+    link: "1",
     messages: [
       {
         name: "eclarke",
@@ -35,7 +41,7 @@ const chatLists = [
     msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
     unreadMsg: "2",
     type: "question",
-     link:'2',
+    link: "2",
   },
   {
     img: "./assets/images/mika.jpg",
@@ -44,7 +50,7 @@ const chatLists = [
     lastMessanger: "Eren",
     msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
     type: "Question",
-     link:'3',
+    link: "3",
   },
   {
     img: "./assets/images/luke.png",
@@ -54,9 +60,22 @@ const chatLists = [
     msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
     unreadMsg: "22",
     type: "Ticket",
-     link:'4',
+    link: "4",
   },
 ];
+onMounted(() => {
+  if (route.params.id) {
+    isChatOpen.value = true;
+  }
+});
+const openChat = (link) => {
+  if (isMobile.value) {
+    isChatOpen.value = true;
+    router.push(`/${link}`);
+  } else {
+    router.push(`/${link}`);
+  }
+};
 
 // const isModalOpened = ref(false);
 
@@ -69,12 +88,37 @@ const chatLists = [
 // const submitHandler = () => {
 //  console.log('aaa')
 // };
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 1056;
+  if (!isMobile.value) {
+    isChatOpen.value = true;
+  } else if (!route.params.id) {
+    isChatOpen.value = false;
+  }
+};
 
+onMounted(() => {
+  window.addEventListener("resize", handleResize);
+  handleResize();
+
+  if (route.params.id) {
+    isChatOpen.value = true;
+  }
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
+});
+watch(route, () => {
+  if (isMobile.value) {
+    isChatOpen.value = !!route.params.id;
+  }
+});
 </script>
 
 <template>
   <div class="chat-wrapper">
-    <div class="chat-list">
+    <div v-if="!isMobile || !isChatOpen" class="chat-list">
       <div class="chat-list__header">
         <div class="chat-list__header-search">
           <input type="text" placeholder="Search" />
@@ -94,12 +138,13 @@ const chatLists = [
           class="chat-list__item"
           v-for="(chat, i) in chatLists"
           :key="i"
+          @click="openChat(chat.link)"
         >
           <WidgetsUserChatCard :items="chat" />
         </div>
       </div>
     </div>
-    <div class="chat-box">
+    <div v-if="!isMobile || isChatOpen" class="chat-box">
       <NuxtPage />
     </div>
   </div>
@@ -110,3 +155,41 @@ const chatLists = [
     name="first-modal"
   /> -->
 </template>
+<style scoped>
+.chat-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+.chat-list {
+  flex: .85;
+  overflow-y: auto;
+}
+
+.chat-box {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-box__header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.back-button .mdi-arrow-left {
+  font-size: 24px;
+  margin-right: 5px;
+}
+</style>

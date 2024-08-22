@@ -4,50 +4,82 @@ const chats = ref([]);
 const backToBottom = ref(false);
 const chatContentRef = ref(null);
 const fileInput = ref(null);
+const router = useRouter();
 
 const selectFileInput = () => {
   fileInput.value.click();
 };
-const fileUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const fileName = file.name;
-    const fileExtension = fileName.split(".").pop();
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageUrl = e.target.result;
-        chats.value.push({
-          isUser: true,
-          userName: "ALi",
-          userProfileImg: "./assets/images/itachi.jpg",
-          userMessages: [{
-            userMessage: imageUrl,
-            userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isImage: true,
-            isForwarded: false
-          }]
-        });
-        addToStorage();
-        scrollToBottom();
-      };
-      reader.readAsDataURL(file);
-    } else {
-      chats.value.push({
-        isUser: true,
-        userName: "ALi",
-        userProfileImg: "./assets/images/itachi.jpg",
-        userMessages: [{
-          userMessage: fileName,
-          userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isImage: false,
-          fileExtension: fileExtension,
-          isForwarded: false
-        }]
-      });
-      addToStorage();
-      scrollToBottom();
+// const fileUpload = (event) => {
+//   const file = event.target.files[0];
+//   if (file) {
+//     const fileName = file.name;
+//     const fileExtension = fileName.split(".").pop();
+//     if (file.type.startsWith("image/")) {
+//       const reader = new FileReader();
+//       reader.onload = (e) => {
+//         const imageUrl = e.target.result;
+//         chats.value.push({
+//           isUser: true,
+//           userName: "ALi",
+//           userProfileImg: "./assets/images/itachi.jpg",
+//           userMessages: [{
+//             userMessage: imageUrl,
+//             userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+//             isImage: true,
+//             isForwarded: false
+//           }]
+//         });
+//         addToStorage();
+//         scrollToBottom();
+//       };
+//       reader.readAsDataURL(file);
+//     } else {
+//       chats.value.push({
+//         isUser: true,
+//         userName: "ALi",
+//         userProfileImg: "./assets/images/itachi.jpg",
+//         userMessages: [{
+//           userMessage: fileName,
+//           userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+//           isImage: false,
+//           fileExtension: fileExtension,
+//           isForwarded: false
+//         }]
+//       });
+//       addToStorage();
+//       scrollToBottom();
+//     }
+//   }
+// };
+const handleMessage = (event = null) => {
+  let messageContent = null;
+  let isImage = false;
+  let fileExtension = null;
+
+  if (event && event.target.files) {
+    const file = event.target.files[0];
+    if (file) {
+      const fileName = file.name;
+      fileExtension = fileName.split(".").pop();
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          messageContent = e.target.result;
+          isImage = true;
+          storeMessage(messageContent, isImage, fileExtension);
+        };
+        reader.readAsDataURL(file);
+        return;
+      } else {
+        messageContent = fileName;
+        storeMessage(messageContent, isImage, fileExtension);
+        return;
+      }
     }
+  } else if (userMessage.value) {
+    messageContent = userMessage.value;
+    storeMessage(messageContent, isImage, fileExtension);
+    userMessage.value = null;
   }
 };
 const loadChats = () => {
@@ -72,29 +104,51 @@ onBeforeUnmount(() => {
   chatContent.removeEventListener("scroll", handleScroll);
 });
 
-const sendMessage = () => {
-  if (userMessage.value) {
+const storeMessage = (messageContent, isImage, fileExtension) => {
+  if (messageContent) {
     chats.value.push({
-      isUser: true,
+      isUser: false,
       userName: "ALi",
       userProfileImg: "./assets/images/itachi.jpg",
-      userMessages: [{
-        userMessage: userMessage.value,
-        userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isForwarded: false
-      }]
+      userMessages: [
+        {
+          userMessage: messageContent,
+          userMessageDate: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          isImage: isImage,
+          fileExtension: fileExtension,
+          isForwarded: false,
+        },
+      ],
     });
     addToStorage();
-    userMessage.value = null;
+    scrollToBottom();
   }
-  scrollToBottom();
 };
+// const sendMessage = () => {
+//   if (userMessage.value) {
+//     chats.value.push({
+//       isUser: true,
+//       userName: "ALi",
+//       userProfileImg: "./assets/images/itachi.jpg",
+//       userMessages: [{
+//         userMessage: userMessage.value,
+//         userMessageDate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+//         isForwarded: false
+//       }]
+//     });
+//     addToStorage();
+//     userMessage.value = null;
+//   }
+//   scrollToBottom();
+// };
 
 const handleScroll = () => {
   const chatContent = chatContentRef.value;
   const isAtBottom =
-    chatContent.scrollHeight - chatContent.scrollTop ===
-    chatContent.clientHeight;
+    chatContent.scrollHeight - chatContent.scrollTop ===chatContent.clientHeight;
   backToBottom.value = !isAtBottom;
 };
 const scrollToBottom = () => {
@@ -108,6 +162,9 @@ const scrollToBottom = () => {
 const addToStorage = () => {
   localStorage.setItem("history", JSON.stringify(chats.value));
 };
+const goBack = () => {
+  router.push("/");
+};
 </script>
 
 <template>
@@ -116,7 +173,7 @@ const addToStorage = () => {
       <span
         class="mdi mdi-chevron-left left-icon"
         role="button"
-        @click="$router.go(-1)"
+        @click="goBack"
       ></span>
       <div class="chatbox-header__content">
         <div class="chatbox-header__img">
@@ -159,14 +216,14 @@ const addToStorage = () => {
         type="file"
         ref="fileInput"
         style="display: none"
-        @change="fileUpload"
+        @change="handleMessage"
       />
       <div class="chatbox-footer__input-msg">
         <input
           type="text"
           placeholder="Type a message..."
           v-model="userMessage"
-          @keyup.enter="sendMessage"
+          @keyup.enter="handleMessage"
         />
       </div>
       <button
@@ -177,7 +234,7 @@ const addToStorage = () => {
       </button>
       <button
         class="chatbox-footer__icons chatbox-footer__voice isMessaging"
-        @click="sendMessage"
+        @click="handleMessage"
         v-else
       >
         <span class="mdi mdi-send send-icon" role="button"></span>
