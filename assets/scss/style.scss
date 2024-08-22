@@ -301,8 +301,11 @@ a {
     justify-content: space-between;
     gap: 10px;
     box-sizing: border-box;
+    .isMessaging {
+      background-color: $blue-100 !important;
+    }
     .chatbox-footer__icons {
-      background-color: #4D96F5;
+      background-color: $blue-100;
       .send-icon {
         font-size: 2rem;
         color: $light;
@@ -344,6 +347,7 @@ a {
   display: flex;
   align-items: end;
   gap: 5px;
+
   .message-card__user-img {
     img {
       object-fit: cover;
@@ -384,5 +388,28 @@ a {
     & :last-child {
       border-radius: 10px 10px 10px 0;
     }
+  }
+}
+
+.message-card--user {
+  flex-direction: row-reverse;
+  .message-card__user-msg {
+    .message-card__user-msg-item {
+      background-color: $blue-100;
+      color: $light;
+      .message-card__user-name {
+        color: $blue-200;
+        .down-icon {
+          color: $gray-300;
+        }
+      }
+      .message-card__date {
+        font-size: 11px;
+        color: $light;
+      }
+    }
+  }
+  & :last-child {
+    border-radius: 10px 10px 0 10px !important;
   }
 }

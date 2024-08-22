@@ -1,7 +1,25 @@
 <script setup>
-const route = useRoute();
-const userMessage = ref(null)
-const isMessage = ref(false)
+const userMessage = ref(null);
+const chats = [
+  {
+    isUser: true,
+    userName: "ALi",
+    userProfileImg: "./assets/images/itachi.jpg",
+    userMessage: "slm chtori?",
+    userMessageDate: "22:25",
+  },
+  {
+    isUser: false,
+    userName: "iman",
+    userProfileImg: "./assets/images/mika.jpg",
+    userMessage: "khobm",
+    userMessageDate: "22:25",
+  },
+];
+const sendMessage  = () => {
+  console.log('aaa')
+  
+}
 </script>
 
 <style lang="scss" scoped></style>
@@ -31,24 +49,34 @@ const isMessage = ref(false)
       </div>
     </div>
     <div class="chatbox-content">
-      <WidgetsUserMessageCard />
-       <WidgetsUserMessageCard :isUser="true"/>
+      <div v-for="(item, i) in chats" :key="i">
+        <WidgetsUserMessageCard :items="item" />
+      </div>
     </div>
     <div class="chatbox-footer">
       <button class="chatbox-footer__icons chatbox-footer__attach">
         <span class="mdi mdi-paperclip attach-icon"></span>
       </button>
       <div class="chatbox-footer__input-msg">
-        <input type="text" placeholder="Type a message..." v-model="userMessage" />
+        <input
+          type="text"
+          placeholder="Type a message..."
+          v-model="userMessage"
+        />
       </div>
-      <button :class="['chatbox-footer__icons chatbox-footer__voice', userMessage ? 'isMessaging' : '']">
-        <span :class="['mdi ' , userMessage ? 'mdi-send send-icon' : 'mdi-microphone voice-icon']"></span>
+      <button
+        class="chatbox-footer__icons chatbox-footer__voice"
+        v-if="!userMessage"
+      >
+        <span class="mdi mdi-microphone voice-icon"></span>
+      </button>
+      <button
+        class="chatbox-footer__icons chatbox-footer__voice isMessaging"
+        @click="sendMessage"
+        v-else
+      >
+        <span class="mdi mdi-send send-icon"></span>
       </button>
     </div>
   </div>
 </template>
-<style>
-.isMessaging {
-  background-color: #4D96F5 !important;
-}
-</style>
