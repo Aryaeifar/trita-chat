@@ -1,28 +1,50 @@
 <script setup>
 const userMessage = ref(null);
-const chats = [
-  {
-    isUser: true,
-    userName: "ALi",
-    userProfileImg: "./assets/images/itachi.jpg",
-    userMessage: "slm chtori?",
-    userMessageDate: "22:25",
-  },
-  {
-    isUser: false,
-    userName: "iman",
-    userProfileImg: "./assets/images/mika.jpg",
-    userMessage: "khobm",
-    userMessageDate: "22:25",
-  },
-];
-const sendMessage  = () => {
-  console.log('aaa')
-  
+const chats = ref([]);
+const backToBottom = ref(true)
+const chatContentRef = ref(null)
+const loadChats = () => {
+  const chatHistory = localStorage.getItem("history");
+  if (chatHistory) {
+    chats.value = JSON.parse(chatHistory);
+  }
+};
+onMounted(() => {
+  loadChats();
+  // sync local storage
+  window.addEventListener("storage", loadChats);
+});
+const addToStorage = () => {
+  localStorage.setItem("history", JSON.stringify(chats.value));
+};
+const sendMessage = () => {
+  if (userMessage.value) {
+    chats.value.push({
+      isUser: true,
+      userName: "ALi",
+      userProfileImg: "./assets/images/itachi.jpg",
+      userMessage: userMessage.value,
+      userMessageDate: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    });
+    addToStorage();
+    userMessage.value = null;
+  }
+};
+// Remove storage sync event
+// ghabl az pak shodn component ejra mishavd - agar event hazf nashavd bad az pak shodn component hm event ejra mishavd
+onBeforeUnmount(() => {
+  window.removeEventListener("storage", loadChats);
+});
+
+const scrollToBottom = () => {
+  const chatContent =  chatContentRef.value
+  console.log(chatContent)
 }
 </script>
 
-<style lang="scss" scoped></style>
 <template>
   <div class="chatbox-wrapper">
     <div class="chatbox-header">
@@ -48,7 +70,10 @@ const sendMessage  = () => {
         </div>
       </div>
     </div>
-    <div class="chatbox-content">
+    <div class="chatbox-content" ref="chatContentRef">
+      <button class="back-to-bottom" v-if="backToBottom" @click="scrollToBottom">
+        <span class="mdi mdi-chevron-down down-icon"></span>
+      </button>
       <div v-for="(item, i) in chats" :key="i">
         <WidgetsUserMessageCard :items="item" />
       </div>
@@ -62,6 +87,7 @@ const sendMessage  = () => {
           type="text"
           placeholder="Type a message..."
           v-model="userMessage"
+          @keyup.enter="sendMessage"
         />
       </div>
       <button
@@ -75,7 +101,7 @@ const sendMessage  = () => {
         @click="sendMessage"
         v-else
       >
-        <span class="mdi mdi-send send-icon"></span>
+        <span class="mdi mdi-send send-icon" role="button"></span>
       </button>
     </div>
   </div>

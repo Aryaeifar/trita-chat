@@ -283,8 +283,23 @@ a {
   }
   .chatbox-content {
     padding: 0.7rem;
+    padding-bottom: 5rem;
     // height: 100vh;
     overflow-y: auto;
+    position: relative;
+    .back-to-bottom {
+      border: none;
+      border-radius: 5px;
+      position: fixed;
+      bottom: 5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      cursor: pointer;
+      .down-icon {
+        font-size: 1.5rem;
+        color: $gray-300;
+      }
+    }
   }
   .chatbox-footer {
     background-color: $gray-100;
