@@ -1,8 +1,9 @@
 <script setup>
 const userMessage = ref(null);
 const chats = ref([]);
-const backToBottom = ref(true)
-const chatContentRef = ref(null)
+const backToBottom = ref(false);
+const chatContentRef = ref(null);
+
 const loadChats = () => {
   const chatHistory = localStorage.getItem("history");
   if (chatHistory) {
@@ -10,9 +11,19 @@ const loadChats = () => {
   }
 };
 onMounted(() => {
+  const chatContent = chatContentRef.value;
+  chatContent.scrollTop = chatContent.scrollHeight;
+  chatContent.addEventListener("scroll", handleScroll);
   loadChats();
   // sync local storage
   window.addEventListener("storage", loadChats);
+});
+// Remove storage sync event
+// ghabl az pak shodn component ejra mishavd - agar event hazf nashavd bad az pak shodn component hm event ejra mishavd
+onBeforeUnmount(() => {
+  window.removeEventListener("storage", loadChats);
+  const chatContent = chatContentRef.value;
+  chatContent.removeEventListener("scroll", handleScroll);
 });
 const addToStorage = () => {
   localStorage.setItem("history", JSON.stringify(chats.value));
@@ -33,16 +44,20 @@ const sendMessage = () => {
     userMessage.value = null;
   }
 };
-// Remove storage sync event
-// ghabl az pak shodn component ejra mishavd - agar event hazf nashavd bad az pak shodn component hm event ejra mishavd
-onBeforeUnmount(() => {
-  window.removeEventListener("storage", loadChats);
-});
 
+const handleScroll = () => {
+  const chatContent = chatContentRef.value;
+  const isAtBottom = chatContent.scrollHeight - chatContent.scrollTop === chatContent.clientHeight;
+  backToBottom.value = !isAtBottom;
+};
 const scrollToBottom = () => {
-  const chatContent =  chatContentRef.value
-  console.log(chatContent)
-}
+  const chatContent = chatContentRef.value;
+  chatContent.scrollTo({
+    top: chatContent.scrollHeight,
+    behavior: 'smooth'
+  })
+  backToBottom.value = false;
+};
 </script>
 
 <template>
@@ -71,7 +86,11 @@ const scrollToBottom = () => {
       </div>
     </div>
     <div class="chatbox-content" ref="chatContentRef">
-      <button class="back-to-bottom" v-if="backToBottom" @click="scrollToBottom">
+      <button
+        class="back-to-bottom"
+        v-if="backToBottom"
+        @click="scrollToBottom"
+      >
         <span class="mdi mdi-chevron-down down-icon"></span>
       </button>
       <div v-for="(item, i) in chats" :key="i">
