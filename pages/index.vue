@@ -155,41 +155,4 @@ watch(route, () => {
     name="first-modal"
   /> -->
 </template>
-<style scoped>
-.chat-wrapper {
-  display: flex;
-  height: 100vh;
-}
 
-.chat-list {
-  flex: .85;
-  overflow-y: auto;
-}
-
-.chat-box {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-box__header {
-  background-color: #f5f5f5;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.back-button .mdi-arrow-left {
-  font-size: 24px;
-  margin-right: 5px;
-}
-</style>

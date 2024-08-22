@@ -39,7 +39,9 @@ a {
 }
 .chat-box {
   width: 100%;
-
+  flex: 2.15;
+  display: flex;
+  flex-direction: column;
   .select-chat-msg {
     height: 100%;
     display: flex;
@@ -54,7 +56,8 @@ a {
 
   .chat-list {
     border-right: 1px solid gray;
-    width: 500px;
+    flex: 0.85;
+    overflow-y: auto;
     .chat-list__header {
       padding: 0.9rem;
       display: flex;
@@ -116,6 +119,11 @@ a {
       overflow-x: hidden;
       max-height: 89vh;
     }
+  }
+}
+@media (max-width: 1056px) {
+  .chat-list {
+    flex: 1 !important;
   }
 }
 .user-card {
