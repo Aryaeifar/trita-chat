@@ -250,6 +250,7 @@ a {
     padding: 0.7rem;
     display: flex;
     gap: 0.9rem;
+    position: relative;
     // border-bottom: 1px solid $gray-200;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
       rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
@@ -438,6 +439,26 @@ a {
           max-width: 100%;
           border-radius: 5px;
         }
+        .message-card__content-file {
+          font-size: 10px;
+          padding: 0.2rem .4rem;
+          border: 1px solid $gray-400;
+          border-radius: 5px !important;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background-color: $light;
+
+          div {
+            background-color: $gray-300;
+            padding: 1px 0.3rem;
+            border-radius: 5px !important;
+            .file-icon {
+              font-size: 1.5rem;
+              color: $light;
+            }
+          }
+        }
       }
       .message-card__date {
         font-size: 10px;
@@ -480,6 +501,24 @@ a {
         word-wrap: break-word;
         text-align: initial;
         unicode-bidi: plaintext;
+        .message-card__content-file {
+          padding: 0.5rem;
+          border: 1px solid $gray-400;
+          border-radius: 5px !important;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background-color: transparent;
+          div {
+            background-color: $gray-300;
+            padding: 1px 0.3rem;
+            border-radius: 5px !important;
+            .file-icon {
+              font-size: 1.5rem;
+              color: $light;
+            }
+          }
+        }
       }
       .message-card__date {
         font-size: 11px;
@@ -558,4 +597,14 @@ a {
     margin-bottom: 1rem;
     cursor: pointer;
   }
+}
+.userType {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  background-color: $salmon;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
 }

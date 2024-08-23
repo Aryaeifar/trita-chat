@@ -70,7 +70,7 @@ export default {
         date: new Date().toLocaleDateString(),
         lastMessanger: 'You',
         msg: 'This is a new chat',
-        unreadMsg: '0',
+        unreadMsg: '20',
         type: this.chatType || 'Unnamed Type',
         link: String(Date.now()),
       };

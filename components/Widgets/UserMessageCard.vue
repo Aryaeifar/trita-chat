@@ -42,6 +42,14 @@ const props = defineProps({
               class="message-card__content-sent-img"
             />
           </template>
+          <template v-else-if="message.fileExtension">
+            <div class="message-card__content-file">
+              <div>
+                <span class="mdi mdi-file file-icon"></span>
+              </div>
+              {{ message.userMessage }}
+            </div>
+          </template>
           <template v-else>
             {{ message.userMessage }}
           </template>

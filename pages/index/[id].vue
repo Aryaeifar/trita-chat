@@ -6,6 +6,10 @@ const backToBottom = ref(false);
 const chatContentRef = ref(null);
 const fileInput = ref(null);
 const router = useRouter();
+const isUserType = ref(true)
+const userType = () => {
+  isUserType.value = !isUserType.value
+}
 const groupName = ref(route.query.groupName || "Unnamed Group");
 const selectFileInput = () => {
   fileInput.value.click();
@@ -51,7 +55,7 @@ const loadChats = () => {
 const storeMessage = (messageContent, isImage, fileExtension) => {
   if (messageContent) {
     chats.value.push({
-      isUser: true,
+      isUser: isUserType.value,
       userName: "ALi",
       userProfileImg: "./assets/images/itachi.jpg",
       userMessages: [
@@ -74,8 +78,7 @@ const storeMessage = (messageContent, isImage, fileExtension) => {
 const handleScroll = () => {
   const chatContent = chatContentRef.value;
   const isAtBottom =
-    chatContent.scrollHeight - chatContent.scrollTop ===
-    chatContent.clientHeight;
+    chatContent.scrollHeight - chatContent.scrollTop === chatContent.clientHeight;
   backToBottom.value = !isAtBottom;
 };
 const scrollToBottom = () => {
@@ -133,6 +136,9 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
+      <button @click="userType" class="userType">
+        user type: {{ isUserType ? 'Host' : 'Guest' }}
+      </button>
     </div>
     <div class="chatbox-content" ref="chatContentRef">
       <button

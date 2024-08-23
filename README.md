@@ -1,81 +1,49 @@
-# Nuxt 3 Minimal Starter
+# Chatbox Project
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Overview
 
-## Demo
-```bash
-# link
-https://trita-chat.vercel.app/
-```
+Chatbox is a web-based chat application developed using Vue.js and Nuxt 3. The app facilitates real-time messaging in a group chat environment, supporting text and image messages, file uploads, and persistent chat history through local storage. The application is designed with responsiveness in mind, ensuring a smooth experience across various devices and browsers.
 
-## Setup
 
-Make sure to install the dependencies:
+این برنامه چت با vue3 و Nuxt3 توسعه داده شد. کاربر با این برنامه میتواند بصورت پویا یک چت با نام و عکس و نوع چت مشخص کند و بسازد. با کلیک روی چت کاربر به صفحه مورد نظر منتقل میشود.
+در حال حاضر تمام چت های ساخته شده فقط به یک صفحه چت منتقل میشوند ولی رونیگ صفحه تغییر میکند.
+کاربر میتواند در صفحه چت مورد نظر پیام خود را تایپ کند یا عکس انتخاب کند و پیام خود را ارسال کند. پیام ها در local storage ذخیره میشوند و اگر چندین تب باهم باز شوند local storage کاملا هماهنگ پیام جدید را در تب های مختلف نمایش میدهد.
+برای تغییر حالت پیام دهنده در صفحه میتوانید از دکمه user type در بالای صفحه استفاده کنید.
 
-```bash
-# npm
-npm install
+برای ساخت چت جدید میتوانید از دکمه + کنار سرچ استفاده کنید. در مدال باز شده مشخصات چت را پر کنید و گذینه submit را بزنید.
+در صورت پر نکردن اطلاعات چت با دیتا دیفالت ساخته میشود و در حال حاضر validation برای ان در نظر گرفته نشده است.
 
-# pnpm
-pnpm install
+مقدار پیام خوانده نشده به صورت استاتیک در حال نمایش است ولی شما میتوانید به صورت دستی در کامپوننت newChat تغییر دهید.
 
-# yarn
-yarn install
+کامپوننت newChat با option api نوشته شده است.
 
-# bun
-bun install
-```
+یادآوری: در این نسخه همه چت ها در یک کامپوننت نوشته شده اند و فرقی ندارد شما وارد کدام چت میشوید.
 
-## Development Server
+## Features
 
-Start the development server on `http://localhost:3000`:
+- **New Chat**: قابلیت ساخت چت جدید.
+- **Sync storage**: چت در تب های مختلف sync است.
+- **Persistent Chat History**: پیام ها در local storage ذخیره میشوند.
+- **Responsive Design**: برنامه برای desktop  و mobile کاملا رسپانسیو نوشته شده است..
+- **Scroll Behavior**: قابلیت scroll to button در چت.
 
-```bash
-# npm
-npm run dev
 
-# pnpm
-pnpm run dev
+1. **Sending Messages**
 
-# yarn
-yarn dev
+   - برای ارسال پیام، در صفحه چت پیام را نوشته و اینتر یا گذینه ارسال را بزنید.
+   - برای ارسال عکس یا فایل گذینه attach را بزنید.
 
-# bun
-bun run dev
-```
+2. **Scrolling**
 
-## Production
+   - با هر ارسال پیام چت به اخرین پیام ارسال شده اسکرول میشود.
+   - با زدن دکمه اسکرول ب پایین به اخرین پیام ارسال شده میرید.
 
-Build the application for production:
+3. **Group Information**
 
-```bash
-# npm
-npm run build
+   - View the group name and member count at the top of the chatbox.
 
-# pnpm
-pnpm run build
+## Technology
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- **Vue.js**: Vue.js 3.
+- **Nuxt.js**: Nuxt 3.
+- **FileReader API**: برای نمایش تصویر و فایل ها.
