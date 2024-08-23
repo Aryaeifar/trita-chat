@@ -51,12 +51,12 @@ const loadChats = () => {
 const storeMessage = (messageContent, isImage, fileExtension) => {
   if (messageContent) {
     chats.value.push({
-      isUser: false,
+      isUser: true,
       userName: "ALi",
       userProfileImg: "./assets/images/itachi.jpg",
       userMessages: [
         {
-          isForwarded: true,
+          isForwarded: false,
           userMessage: messageContent,
           userMessageDate: new Date().toLocaleTimeString([], {
             hour: "2-digit",

@@ -244,7 +244,8 @@ a {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
   .chatbox-header {
     padding: 0.7rem;
     display: flex;
@@ -525,7 +526,7 @@ a {
   display: flex;
   flex-direction: column;
   input {
-    padding: .5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     border: 1px solid $gray-200;
   }
@@ -535,7 +536,7 @@ a {
   flex-direction: column;
   margin: 1rem 0;
   input {
-    padding: .5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     border: 1px solid $gray-200;
   }
