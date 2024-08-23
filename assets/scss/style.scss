@@ -245,6 +245,7 @@ a {
   flex-direction: column;
   position: relative;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   overflow-y: auto;
   .chatbox-header {
     padding: 0.7rem;
