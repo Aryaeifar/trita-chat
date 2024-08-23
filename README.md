@@ -1,5 +1,12 @@
 # Chatbox Project
 
+## Demo
+
+``` bash 
+    https://trita-chat.vercel.app/
+
+```
+
 ## Overview
 
 Chatbox is a web-based chat application developed using Vue.js and Nuxt 3. The app facilitates real-time messaging in a group chat environment, supporting text and image messages, file uploads, and persistent chat history through local storage. The application is designed with responsiveness in mind, ensuring a smooth experience across various devices and browsers.
