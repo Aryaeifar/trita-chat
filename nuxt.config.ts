@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       charset: "utf-8",
       title: "Trita Chat",
       meta: [
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
       ],
     },
   },
@@ -18,9 +18,5 @@ export default defineNuxtConfig({
     "@mdi/font/css/materialdesignicons.min.css",
     "@/assets/scss/app.scss",
   ],
-
-
-
-
   compatibilityDate: "2024-08-12",
 });
