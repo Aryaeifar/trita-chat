@@ -41,7 +41,7 @@ Chatbox is a web-based chat application developed using Vue.js and Nuxt 3. The a
    - با زدن دکمه اسکرول ب پایین به اخرین پیام ارسال شده میرید
 
 
-## تکنولوژی ها
+## Technology
 
 - **Vue.js**: Vue.js 3.
 - **Nuxt.js**: Nuxt 3.
