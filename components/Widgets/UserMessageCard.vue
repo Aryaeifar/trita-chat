@@ -18,7 +18,7 @@ const props = defineProps({
             <div class="message-card__user-name">{{ items.userName }}</div>
             <div class="message-card__user-forward" v-if="message.isForwarded">Forwarded message:</div>
             <div class="message-card__user-forward-name" v-if="message.isForwarded">
-              From: {{ message.userName }}
+              From: {{ items.userName }}
             </div>
           </div>
           <div>

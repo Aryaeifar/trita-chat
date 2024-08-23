@@ -1,9 +1,9 @@
 <template>
   <NuxtLayout>
-    <v-app>
+    <div>
        <!-- <NuxtLoadingIndicator color="blue" /> -->
       <NuxtPage />
-    </v-app>
+    </div>
   </NuxtLayout>
 </template>
 <style>

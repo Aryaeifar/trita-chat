@@ -5,150 +5,41 @@ const isMobile = ref(window.innerWidth <= 1056);
 const router = useRouter();
 const route = useRoute();
 
-const chatLists = [
-  {
-    img: "./assets/images/vader.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "t-learning",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "4332",
-    type: "Group",
-    link: "1",
-  },
-  {
-    img: "./assets/images/itachi.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Sasuke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "2",
-    type: "question",
-    link: "2",
-  },
-  {
-    img: "./assets/images/mika.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Eren",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    type: "Question",
-    link: "3",
-  },
-  {
-    img: "./assets/images/luke.png",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "luke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "22",
-    type: "Ticket",
-    link: "4",
-  },
-  {
-    img: "./assets/images/vader.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "t-learning",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "4332",
-    type: "Group",
-    link: "1",
-  },
-  {
-    img: "./assets/images/itachi.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Sasuke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "2",
-    type: "question",
-    link: "2",
-  },
-  {
-    img: "./assets/images/mika.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Eren",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    type: "Question",
-    link: "3",
-  },
-  {
-    img: "./assets/images/luke.png",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "luke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "22",
-    type: "Ticket",
-    link: "4",
-  },
-  {
-    img: "./assets/images/vader.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "t-learning",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "4332",
-    type: "Group",
-    link: "1",
-  },
-  {
-    img: "./assets/images/itachi.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Sasuke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "2",
-    type: "question",
-    link: "2",
-  },
-  {
-    img: "./assets/images/mika.jpg",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "Eren",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    type: "Question",
-    link: "3",
-  },
-  {
-    img: "./assets/images/luke.png",
-    title: "Arya",
-    date: "Jun 22",
-    lastMessanger: "luke",
-    msg: "Lorem, ipsum dolor sit amet ipsum doloipsum dolo",
-    unreadMsg: "22",
-    type: "Ticket",
-    link: "4",
-  },
-];
+const chatLists = ref([]);
 onMounted(() => {
   if (route.params.id) {
     isChatOpen.value = true;
   }
 });
-const openChat = (link) => {
+const openChat = (chat) => {
   if (isMobile.value) {
     isChatOpen.value = true;
-    router.push(`/${link}`);
+    router.push({
+      path: `/${chat.link}`,
+      query: { groupName: chat.title },
+    });
   } else {
-    router.push(`/${link}`);
+    router.push({
+      path: `/${chat.link}`,
+      query: { groupName: chat.title },
+    });
   }
 };
 
-// const isModalOpened = ref(false);
+const isModalOpened = ref(false);
 
-// const openModal = () => {
-//   isModalOpened.value = true;
-// };
-// const closeModal = () => {
-//   isModalOpened.value = false;
-// };
-// const submitHandler = () => {
-//  console.log('aaa')
-// };
+const openModal = () => {
+  isModalOpened.value = true;
+};
+const closeModal = () => {
+  console.log("aaa");
+  isModalOpened.value = false;
+};
+const submitChat = (newChat) => {
+  chatLists.value.push(newChat);
+  localStorage.setItem("chatLists", JSON.stringify(chatLists.value));
+  closeModal();
+};
 const handleResize = () => {
   isMobile.value = window.innerWidth <= 1056;
   if (!isMobile.value) {
@@ -159,6 +50,11 @@ const handleResize = () => {
 };
 
 onMounted(() => {
+  const storedChats = localStorage.getItem("chatLists");
+  if (storedChats) {
+    chatLists.value = JSON.parse(storedChats);
+  }
+
   window.addEventListener("resize", handleResize);
   handleResize();
 
@@ -194,26 +90,36 @@ watch(route, () => {
           </button>
         </div>
       </div>
-      <div class="chat-list__items">
+      <div class="chat-list__items" v-if="chatLists.length">
         <div
           class="chat-list__item"
           v-for="(chat, i) in chatLists"
           :key="i"
-          @click="openChat(chat.link)"
+          @click="openChat(chat)"
         >
           <WidgetsUserChatCard :items="chat" />
         </div>
+      </div>
+      <div
+        v-else
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 89vh;
+        "
+      >
+        Create new chat
       </div>
     </div>
     <div v-if="!isMobile || isChatOpen" class="chat-box">
       <NuxtPage />
     </div>
   </div>
-  <!-- <WidgetsNewChat
+  <WidgetsNewChat
     :isOpen="isModalOpened"
     @modal-close="closeModal"
-    @submit="submitHandler"
+    @submit="submitChat"
     name="first-modal"
-  /> -->
+  />
 </template>
-

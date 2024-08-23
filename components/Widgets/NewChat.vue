@@ -1,34 +1,29 @@
-<script setup>
-import { onClickOutside } from "@vueuse/core";
-
-const props = defineProps({
-  isOpen: Boolean,
-});
-
-const emit = defineEmits(["modal-close", "submit"]);
-
-const target = ref(null);
-onClickOutside(target, () => emit("modal-close"));
-</script>
-
 <template>
   <Teleport to="body">
     <Transition name="modal-fade">
       <div v-if="isOpen" class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container" ref="target">
+            <span class="mdi mdi-close close-icon" @click="closeModal"></span>
+            <div class="modal-title">New Chat</div>
             <div class="modal-header">
-              <slot name="header"> default header </slot>
+              Chat name
+              <input type="text" v-model="chatName" />
             </div>
             <div class="modal-body">
-              <slot name="content"> default content </slot>
+              <div style="display: flex; flex-direction: column">
+                Chat type
+                <input type="text" v-model="chatType" />
+              </div>
+              <div
+                style="display: flex; flex-direction: column; margin-top: 1rem"
+              >
+                Chat profile image
+                <input type="file" @change="selectProfile" />
+              </div>
             </div>
             <div class="modal-footer">
-              <slot name="footer">
-                <div>
-                  <button @click.stop="emit('submit', $event)">Submit</button>
-                </div>
-              </slot>
+              <button class="modal-submit" @click="createChat">Submit</button>
             </div>
           </div>
         </div>
@@ -36,25 +31,59 @@ onClickOutside(target, () => emit("modal-close"));
     </Transition>
   </Teleport>
 </template>
+<script>
+export default {
+  name: 'NewChatModal',
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  emits: ['modal-close', 'submit'],
+  data() {
+    return {
+      target: null,
+      chatName: '',
+      chatType: '',
+      profileImage: null,
+    };
+  },
+  methods: {
+    closeModal() {
+      this.$emit('modal-close');
+    },
+    selectProfile(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.profileImage = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    createChat() {
+      const newChat = {
+        img: this.profileImage || '/assets/images/group.png',
+        title: this.chatName || 'Unnamed Group',
+        date: new Date().toLocaleDateString(),
+        lastMessanger: 'You',
+        msg: 'This is a new chat',
+        unreadMsg: '0',
+        type: this.chatType || 'Unnamed Type',
+        link: String(Date.now()),
+      };
 
+      this.$emit('submit', newChat);
+      this.chatName = '';
+      this.chatType = '';
+      this.profileImage = null;
+    },
+  },
+};
+</script>
 <style scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.modal-container {
-  width: 300px;
-  margin: 150px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-}
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.5s;
