@@ -484,6 +484,16 @@ a {
       .message-card__date {
         font-size: 11px;
         color: $light;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        .check-icon {
+          font-size: 10px;
+          color: $light;
+          display: block;
+        }
       }
     }
   }

@@ -12,12 +12,22 @@ const props = defineProps({
       <img :src="items.userProfileImg" alt="" />
     </div>
     <div class="message-card__user-msg">
-      <div v-for="(message, index) in items.userMessages" :key="index" class="message-card__user-msg-item" style="display: inline-block;">
+      <div
+        v-for="(message, index) in items.userMessages"
+        :key="index"
+        class="message-card__user-msg-item"
+        style="display: inline-block"
+      >
         <div class="message-card__header">
           <div class="message-card__header-info">
             <div class="message-card__user-name">{{ items.userName }}</div>
-            <div class="message-card__user-forward" v-if="message.isForwarded">Forwarded message:</div>
-            <div class="message-card__user-forward-name" v-if="message.isForwarded">
+            <div class="message-card__user-forward" v-if="message.isForwarded">
+              Forwarded message:
+            </div>
+            <div
+              class="message-card__user-forward-name"
+              v-if="message.isForwarded"
+            >
               From: {{ items.userName }}
             </div>
           </div>
@@ -36,7 +46,12 @@ const props = defineProps({
             {{ message.userMessage }}
           </template>
         </div>
-        <div class="message-card__date">{{ message.userMessageDate }}</div>
+        <div class="message-card__date">
+          {{ message.userMessageDate }}
+          <div v-if="items.isUser">
+            <span class="mdi mdi-check-all check-icon"></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
