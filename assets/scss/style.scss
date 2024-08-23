@@ -26,6 +26,8 @@ body {
   overflow-y: hidden;
   overflow-x: hidden;
   max-height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
   &.modal-open {
     .custom-scroll {
       overflow-y: hidden;
