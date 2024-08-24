@@ -143,7 +143,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <button @click="userType" class="userType">
-          user type: {{ isUserType ? 'Host' : 'Guest' }}
+          Type: {{ isUserType ? 'Host' : 'Guest' }}
         </button>
       </div>
       <div class="chatbox-content" ref="chatContentRef">
