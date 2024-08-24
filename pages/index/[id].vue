@@ -108,9 +108,13 @@ onMounted(() => {
   chatContent.scrollTop = chatContent.scrollHeight;
   chatContent.addEventListener("scroll", handleScroll);
   loadChats();
+
+   // sync local storage
   window.addEventListener("storage", loadChats);
 });
 
+// Remove storage sync event
+// ghabl az pak shodn component ejra mishavd - agar event hazf nashavd bad az pak shodn component hm event ejra mishavd
 onBeforeUnmount(() => {
   window.removeEventListener("storage", loadChats);
   const chatContent = chatContentRef.value;
