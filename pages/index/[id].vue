@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 const route = useRoute();
 const userMessage = ref(null);
 const chats = ref([]);
@@ -11,9 +11,11 @@ const userType = () => {
   isUserType.value = !isUserType.value
 }
 const groupName = ref(route.query.groupName || "Unnamed Group");
+
 const selectFileInput = () => {
   fileInput.value.click();
 };
+
 const handleMessage = (event = null) => {
   let messageContent = null;
   let isImage = false;
@@ -45,8 +47,9 @@ const handleMessage = (event = null) => {
     userMessage.value = null;
   }
 };
+
 const loadChats = () => {
-  const chatHistory = localStorage.getItem("history");
+  const chatHistory = localStorage.getItem(`history_${route.params.id}`);
   if (chatHistory) {
     chats.value = JSON.parse(chatHistory);
   }
@@ -75,12 +78,14 @@ const storeMessage = (messageContent, isImage, fileExtension) => {
     scrollToBottom();
   }
 };
+
 const handleScroll = () => {
   const chatContent = chatContentRef.value;
   const isAtBottom =
     chatContent.scrollHeight - chatContent.scrollTop === chatContent.clientHeight;
   backToBottom.value = !isAtBottom;
 };
+
 const scrollToBottom = () => {
   const chatContent = chatContentRef.value;
   chatContent.scrollTo({
@@ -89,22 +94,23 @@ const scrollToBottom = () => {
   });
   backToBottom.value = false;
 };
+
 const addToStorage = () => {
-  localStorage.setItem("history", JSON.stringify(chats.value));
+  localStorage.setItem(`history_${route.params.id}`, JSON.stringify(chats.value));
 };
+
 const goBack = () => {
   router.push("/");
 };
+
 onMounted(() => {
   const chatContent = chatContentRef.value;
   chatContent.scrollTop = chatContent.scrollHeight;
   chatContent.addEventListener("scroll", handleScroll);
   loadChats();
-  // sync local storage
   window.addEventListener("storage", loadChats);
 });
-// Remove storage sync event
-// ghabl az pak shodn component ejra mishavd - agar event hazf nashavd bad az pak shodn component hm event ejra mishavd
+
 onBeforeUnmount(() => {
   window.removeEventListener("storage", loadChats);
   const chatContent = chatContentRef.value;
@@ -112,81 +118,81 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<template>
-  <div class="chatbox-wrapper">
-    <div class="chatbox-header">
-      <span
-        class="mdi mdi-chevron-left left-icon"
-        role="button"
-        @click="goBack"
-      ></span>
-      <div class="chatbox-header__content">
-        <div class="chatbox-header__img">
-          <img src="@/assets/images/vader.jpg" alt="" />
+  <template>
+    <div class="chatbox-wrapper">
+      <div class="chatbox-header">
+        <span
+          class="mdi mdi-chevron-left left-icon"
+          role="button"
+          @click="goBack"
+        ></span>
+        <div class="chatbox-header__content">
+          <div class="chatbox-header__img">
+            <img src="@/assets/images/vader.jpg" alt="" />
+          </div>
+          <div class="chatbox-header__info">
+            <div class="chatbox-header__info-title">
+              <div class="chatbox-header__type">Group: &nbsp</div>
+              <div class="chatbox-header__name">{{ groupName }}</div>
+            </div>
+            <div class="chatbox-header__info-members">
+              <div class="chatbox-header__info-members-count">10601 Members</div>
+              , &ensp;
+              <div class="chatbox-header__info-members-online">3 Online</div>
+            </div>
+          </div>
         </div>
-        <div class="chatbox-header__info">
-          <div class="chatbox-header__info-title">
-            <div class="chatbox-header__type">Group: &nbsp</div>
-            <div class="chatbox-header__name">{{ groupName }}</div>
-          </div>
-          <div class="chatbox-header__info-members">
-            <div class="chatbox-header__info-members-count">10601 Members</div>
-            , &ensp;
-            <div class="chatbox-header__info-members-online">3 Online</div>
-          </div>
+        <button @click="userType" class="userType">
+          user type: {{ isUserType ? 'Host' : 'Guest' }}
+        </button>
+      </div>
+      <div class="chatbox-content" ref="chatContentRef">
+        <button
+          class="back-to-bottom"
+          v-if="backToBottom"
+          @click="scrollToBottom"
+        >
+          <span class="mdi mdi-chevron-down down-icon"></span>
+        </button>
+        <div v-for="(item, i) in chats" :key="i">
+          <WidgetsUserMessageCard :items="item" />
         </div>
       </div>
-      <button @click="userType" class="userType">
-        user type: {{ isUserType ? 'Host' : 'Guest' }}
-      </button>
-    </div>
-    <div class="chatbox-content" ref="chatContentRef">
-      <button
-        class="back-to-bottom"
-        v-if="backToBottom"
-        @click="scrollToBottom"
-      >
-        <span class="mdi mdi-chevron-down down-icon"></span>
-      </button>
-      <div v-for="(item, i) in chats" :key="i">
-        <WidgetsUserMessageCard :items="item" />
-      </div>
-    </div>
-    <div class="chatbox-footer">
-      <button
-        class="chatbox-footer__icons chatbox-footer__attach"
-        role="button"
-        @click="selectFileInput"
-      >
-        <span class="mdi mdi-paperclip attach-icon"></span>
-      </button>
-      <input
-        type="file"
-        ref="fileInput"
-        style="display: none"
-        @change="handleMessage"
-      />
-      <div class="chatbox-footer__input-msg">
+      <div class="chatbox-footer">
+        <button
+          class="chatbox-footer__icons chatbox-footer__attach"
+          role="button"
+          @click="selectFileInput"
+        >
+          <span class="mdi mdi-paperclip attach-icon"></span>
+        </button>
         <input
-          type="text"
-          placeholder="Type a message..."
-          v-model="userMessage"
-          @keyup.enter="handleMessage"
+          type="file"
+          ref="fileInput"
+          style="display: none"
+          @change="handleMessage"
         />
+        <div class="chatbox-footer__input-msg">
+          <input
+            type="text"
+            placeholder="Type a message..."
+            v-model="userMessage"
+            @keyup.enter="handleMessage"
+          />
+        </div>
+        <button
+          class="chatbox-footer__icons chatbox-footer__voice"
+          v-if="!userMessage"
+        >
+          <span class="mdi mdi-microphone voice-icon"></span>
+        </button>
+        <button
+          class="chatbox-footer__icons chatbox-footer__voice isMessaging"
+          @click="handleMessage"
+          v-else
+        >
+          <span class="mdi mdi-send send-icon" role="button"></span>
+        </button>
       </div>
-      <button
-        class="chatbox-footer__icons chatbox-footer__voice"
-        v-if="!userMessage"
-      >
-        <span class="mdi mdi-microphone voice-icon"></span>
-      </button>
-      <button
-        class="chatbox-footer__icons chatbox-footer__voice isMessaging"
-        @click="handleMessage"
-        v-else
-      >
-        <span class="mdi mdi-send send-icon" role="button"></span>
-      </button>
     </div>
-  </div>
-</template>
+  </template>

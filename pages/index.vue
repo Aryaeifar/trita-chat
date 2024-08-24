@@ -32,12 +32,12 @@ const openModal = () => {
   isModalOpened.value = true;
 };
 const closeModal = () => {
-  console.log("aaa");
   isModalOpened.value = false;
 };
 const submitChat = (newChat) => {
   chatLists.value.push(newChat);
   localStorage.setItem("chatLists", JSON.stringify(chatLists.value));
+  localStorage.setItem(`history_${newChat.link}`, JSON.stringify([]));
   closeModal();
 };
 const handleResize = () => {
